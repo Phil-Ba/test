@@ -1,25 +1,19 @@
 package cleaning
 
+import cleaning.Board.{BotMove, Coordinate}
+
 /**
   *
   */
-class Board(pos: String, boardArray: Seq[String]) {
-
-  type Coordinate = (Int, Int)
-  type BotMove = (Coordinate, Move)
-
-  val botPosition: Coordinate = (pos(0).asDigit, pos(2).asDigit)
-
-  private val dirtPositions: Seq[Coordinate] = boardArray
-    .zipWithIndex
-    .flatMap(line => line._1.zipWithIndex
-      .withFilter(_._1 == 'd')
-      .map(d => (d._2, line._2))
-    )
+class Board private(private val botPosition: Coordinate, private val dirtPositions: Seq[Coordinate]) {
 
   def isClean: Boolean = dirtPositions.isEmpty
 
   val canClean: Boolean = dirtPositions.contains(botPosition)
+
+  def clean(): Board = new Board(botPosition, dirtPositions.diff(Seq(botPosition)))
+
+  def moveBot(botMove: BotMove): Board = new Board(botMove._1, dirtPositions)
 
   def validMoves: Seq[BotMove] = {
     val tuples: Array[((Int, Int), Move)] = for {
@@ -32,4 +26,21 @@ class Board(pos: String, boardArray: Seq[String]) {
     tuples
   }
 
+}
+
+object Board {
+  type Coordinate = (Int, Int)
+  type BotMove = (Coordinate, Move)
+
+  def apply(pos: String, boardArray: Seq[String]): Board = {
+    val botPosition: Coordinate = (pos(0).asDigit, pos(2).asDigit)
+
+    val dirtPositions: Seq[Coordinate] = boardArray
+      .zipWithIndex
+      .flatMap(line => line._1.zipWithIndex
+        .withFilter(_._1 == 'd')
+        .map(d => (d._2, line._2))
+      )
+    new Board(botPosition, dirtPositions)
+  }
 }
