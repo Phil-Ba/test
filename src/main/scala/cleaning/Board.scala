@@ -30,6 +30,21 @@ class Board private(private val botPosition: Coordinate, private val dirtPositio
     }
   }
 
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Board]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Board =>
+      (that canEqual this) &&
+        botPosition == that.botPosition &&
+        dirtPositions == that.dirtPositions
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(botPosition, dirtPositions)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
 }
 
 object Board {
