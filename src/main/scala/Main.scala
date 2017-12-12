@@ -29,6 +29,7 @@ object Main {
       jDur.between(start, end)
       solution.map(x => (s"moves(${x._2.size}) = ${x._2.reverse}"))
     }.map { x =>
+      println(x.mkString("\r\n"))
       Files.write(Paths.get("lines.txt"), x.asJava)
     }
 

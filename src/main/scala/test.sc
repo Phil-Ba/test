@@ -1,25 +1,24 @@
-import java.util.Scanner
+import cleaning.Board
 
-import scala.collection.mutable
-import scala.io.StdIn
+//val sc = new Scanner(System.in)
+//val entries = sc.nextInt()
+//val map = new mutable.HashMap[String, Int]()
+//
+//for (_ <- 1 to entries) {
+//  val inp: Array[String] = sc.nextLine().split(" ")
+//  map += inp.head -> inp.last.toInt
+//}
+//println(map)
+//while (sc.hasNext){
+//  val s = sc.next()
+//  println(map.get(s)
+//    .fold("Not found")(i => s + "=" + i))
+//}
+//
+val b1 = Board("1 1", Seq("----d", "----d", "----d", "----d", "----d"))
+val b2 = Board("1 1", Seq("--dxd", "----d", "----d", "----d", "----d"))
 
-val sc = new Scanner(System.in)
-val entries = sc.nextInt()
-val map = new mutable.HashMap[String, Int]()
-
-for (_ <- 1 to entries) {
-  val inp: Array[String] = sc.nextLine().split(" ")
-  map += inp.head -> inp.last.toInt
-}
-println(map)
-while (sc.hasNext){
-  val s = sc.next()
-  println(map.get(s)
-    .fold("Not found")(i => s + "=" + i))
-}
-
-
-
+b1 == b2
 //def listMethod(l: List[Int]) = l.sum
 //val l2 = List(2, 5, 7, 4, 1, 8)
 //val l = List(1, 2, 3, 4, 5)
