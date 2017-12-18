@@ -20,4 +20,21 @@ public enum Move {
         this.y = y;
     }
 
+    public static boolean areOpposites(Move m1, Move m2) {
+        if (m1 == Left && m2 == Right) {
+            return true;
+        }
+        if (m2 == Left && m1 == Right) {
+            return true;
+        }
+        if (m2 == Up && m1 == Down) {
+            return true;
+        }
+        if (m1 == Up && m2 == Down) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

@@ -45,6 +45,9 @@ class Board private(private val botPosition: Coordinate, private val dirtPositio
     val state = Seq(botPosition, dirtPositions)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+
+  override def toString = s"Board($botPosition, $dirtPositions)"
 }
 
 object Board {

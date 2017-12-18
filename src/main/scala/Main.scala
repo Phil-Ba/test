@@ -33,6 +33,6 @@ object Main {
       Files.write(Paths.get("lines.txt"), x.asJava)
     }
 
-    Await.result(task, Duration(2, TimeUnit.MINUTES))
+    Await.result(task, Duration(2, TimeUnit.HOURS))
   }
 }
