@@ -1,8 +1,10 @@
 package cleaning
 
+import com.typesafe.scalalogging.StrictLogging
+
 import scala.collection.mutable
 
-class Solver {
+class Solver extends StrictLogging {
 
   type boardWithMoves = (Board, Seq[Move])
 
@@ -11,9 +13,13 @@ class Solver {
     solveRec(mutable.Queue((staringBoard, Seq.empty)), Seq(staringBoard))
       //      .filter(x => x._1.isClean && x._2.head == Move.Clean)
       .filter(b => {
-      println("testing: " + b._1)
+      //      println("testing: " + b._1)
       b._1.isClean && b._2.head == Move.Clean
     })
+      .map(x => {
+        logger.info("found one: {}", x)
+        x
+      })
       //                  .filter(_._1.isClean)
       //      .filter(_._2.head == Move.Clean)
       .take(50)
@@ -29,10 +35,10 @@ class Solver {
       println("finished?!")
       return Stream.empty
     }
-    println(workStack.size)
+    //    println(workStack.size)
 
     val currentBoardsAndMoves = workStack.dequeue()
-    println("cur: " + currentBoardsAndMoves)
+    //    println("cur: " + currentBoardsAndMoves)
 
     val stream: Seq[(Board, Seq[Move])] = for {
       //      currentBoardsAndMoves <- workStack.dequeue()
@@ -41,14 +47,15 @@ class Solver {
       newBoardsAndMoves
     }
 
-    println("new: " + stream)
+    //    println("new: " + stream)
     //    println("new: " + stream.size)
-    val newBoardHistory = boardHistory ++ stream.map(_._1)
+    //    val newBoardHistory = boardHistory ++ stream.map(_._1)
+    val newBoardHistory = boardHistory :+ currentBoardsAndMoves._1
 
     //    boardsAndMoves.append(solveRec(stream, newBoardHistory))
     //    solveRec(boardsAndMoves.append(stream), newBoardHistory)
     workStack ++= stream
-    println("ws: " + workStack.size)
+    //    println("ws: " + workStack.size)
     val s2 = stream.toStream
 
     s2.append(solveRec(workStack, newBoardHistory))
@@ -64,8 +71,8 @@ class Solver {
       val newMoves = doAllPossibleMoves(currentBoard)
 
       val newBoardsAndMoves = newMoves
-        .withFilter({ case (_, m) => moves.isEmpty || Move.areOpposites(m, moves.head) == false })
-        //                .withFilter({ case (board, _) => boardHistory.contains(board) == false })
+        //        .withFilter({ case (_, m) => moves.isEmpty || Move.areOpposites(m, moves.head) == false })
+        .withFilter({ case (board, _) => boardHistory.contains(board) == false })
         .map({ case (board, move) => (board, move +: moves) })
 
       newBoardsAndMoves

@@ -3,6 +3,8 @@ import java.time.{Instant, Duration => jDur}
 import java.util.concurrent.TimeUnit
 
 import cleaning.Solver
+import com.typesafe.scalalogging.StrictLogging
+import org.pmw.tinylog.Configurator
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -10,8 +12,14 @@ import scala.concurrent.{Await, Future}
 /**
   *
   */
-object Main {
+object Main extends StrictLogging {
   def main(args: Array[String]): Unit = {
+    Configurator
+      .defaultConfig()
+      .formatPattern("{level} {date:HH:mm:ss} [{thread}] {class}: {message}")
+      .writingThread(true)
+      .activate()
+
     val start = Instant.now()
 
     import scala.collection.JavaConverters._
@@ -26,10 +34,11 @@ object Main {
         "----d")
       )
       val end = Instant.now()
-      jDur.between(start, end)
+      val dur = jDur.between(start, end)
+      logger.info("Total time: {}", dur)
       solution.map(x => (s"moves(${x._2.size}) = ${x._2.reverse}"))
     }.map { x =>
-      println(x.mkString("\r\n"))
+      logger.info(x.mkString("\r\n"))
       Files.write(Paths.get("lines.txt"), x.asJava)
     }
 
